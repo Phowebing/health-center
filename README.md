@@ -1,42 +1,107 @@
-# 전국 보건소 위치 안내 서비스 앱
+# 기본 페이지 구성
 
-## 1. Next.js TS 프로젝트 생성
+- `yarn dev`
 
-- `npx create-next-app@latest ./ --typescript`
-- prettier 설정
-  : [참고문서](https://prettier.io/)
-  : `yarn add --dev --exact prettier`
-  : / .prettierrc.json 파일 생성
+## 1. 각 파일 정리
 
-```json
-{
-  "singleQuote": true,
-  "semi": true,
-  "useTabs": false,
-  "tabWidth": 2,
-  "trailingComma": "all",
-  "printWidth": 80,
-  "arrowParens": "avoid",
-  "endOfLine": "auto"
+### 1.1. http://localhost:3000/
+
+#### /src/app/layout.tsx
+
+```tsx
+import type { Metadata } from 'next';
+import './globals.css';
+export const metadata: Metadata = {
+  title: '전국 보건소 위치 안내',
+  description: '전국 보건소 위치 안내 서비스 앱',
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="ko">
+      <body>{children}</body>
+    </html>
+  );
 }
 ```
 
-- ESLint 에서 prettier 설정 제어
-  : [설정](https://nextjs.org/docs/app/building-your-application/configuring/eslint#prettier)
-  : `yarn add --dev eslint-config-prettier`
-  : .eslintrc.json
+- global.css
 
-  ```json
-  {
-    "extends": ["next/core-web-vitals", "prettier"]
-  }
-  ```
+```css
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline-style: none;
+}
+ul,
+li {
+  list-style: none;
+}
+a {
+  color: #000;
+  text-decoration: none;
+}
+html {
+}
+body {
+}
+```
 
-- scss 설정
-  `yarn add sass`
+#### /src/app/page.tsx
 
-## 2.깃허브 셋팅
+```tsx
+export default function Home() {
+  return (
+    <>
+      <main>테스트</main>
+    </>
+  );
+}
+```
 
-- 저장소명 : health-center
-- 설명 : 전국 보건소 위치 안내 서비스
-- `git remote add origin https://github.com/아이디/health-center.git`
+## HederComponent.tsx 진행
+
+- header 역할인 경우 각 page 에 배치되는 컴포넌트
+- src/components/common 폴더
+- src/components/common/HeaderComponent.tsx 생성
+
+```tsx
+import Link from 'next/link';
+import React from 'react';
+
+const HeaderComponent = (): JSX.Element => {
+  return (
+    <>
+      <header>
+        <div>
+          <Link href="/">로고</Link>
+        </div>
+      </header>
+    </>
+  );
+};
+
+export default HeaderComponent;
+```
+
+- /src/app/page.tsx
+  : @ 은 /src 경로를 지칭한는 별칭(alias) 이다.
+  : tsconfig.json 의 path 에 설정됨
+
+```tsx
+import HeaderComponent from '@/components/common/HeaderComponent';
+
+export default function Home() {
+  return (
+    <>
+      <HeaderComponent />
+      <main>테스트</main>
+    </>
+  );
+}
+```
